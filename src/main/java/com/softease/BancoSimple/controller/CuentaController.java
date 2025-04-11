@@ -3,7 +3,9 @@ package com.softease.BancoSimple.controller;
 import com.softease.BancoSimple.dto.CuentaDTO;
 import com.softease.BancoSimple.service.CuentaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -21,7 +23,16 @@ public class CuentaController {
 
     @GetMapping("/{id}")
     public CuentaDTO obtenerPorId(@PathVariable Integer id) {
-        return cuentaService.obtenerPorId(id);
+        CuentaDTO cuenta = cuentaService.obtenerPorId(id);
+
+        if (cuenta == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Cuenta no encontrada con ID: " + id
+            );
+        }
+
+        return cuenta;
     }
 
     @PostMapping
