@@ -6,4 +6,7 @@ import java.util.List;
 
 public interface TarjetasVirtualesService {
     public List <TarjetasVirtualesDTO> obtenerTodas ();
+
+    TarjetasVirtualesDTO crear(TarjetasVirtualesDTO dto);
+
 }

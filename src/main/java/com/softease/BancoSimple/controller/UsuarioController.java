@@ -3,6 +3,7 @@ import com.softease.BancoSimple.dto.auth.RegisterRequest;
 import com.softease.BancoSimple.dto.auth.UsuarioResponseDTO;
 import com.softease.BancoSimple.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
 public class UsuarioController {
 
     @Autowired
-    private UsuarioService service; //Revisar este error
+    private UsuarioService service;
 
     @GetMapping
     public List<UsuarioResponseDTO> obtenerTodos() {
@@ -33,5 +34,12 @@ public class UsuarioController {
     public UsuarioResponseDTO actualizar(@PathVariable Integer id, @RequestBody RegisterRequest request) {
         return service.actualizar(id, request);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminar(@PathVariable Integer id) {
+        service.eliminar(id);
+        return ResponseEntity.noContent().build();
+    }
+
 
 }

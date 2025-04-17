@@ -13,14 +13,6 @@ public class UsuarioMapper {
         );
     }
 
-    public static Usuario toEntity(UsuarioResponseDTO dto) { //Revisar esta linea
-        Usuario usuario = new Usuario();
-        usuario.setId(dto.getId());
-        usuario.setNombre(dto.getNombre());
-        usuario.setEmail(dto.getEmail());
-        return usuario;
-    }
-
     public static Usuario toEntity(RegisterRequest request) {
         Usuario usuario = new Usuario();
         usuario.setNombre(request.getNombre());
@@ -29,3 +21,4 @@ public class UsuarioMapper {
         return usuario;
     }
 }
+

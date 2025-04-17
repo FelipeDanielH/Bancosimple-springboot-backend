@@ -27,7 +27,6 @@ class CuentaControllerTest {
     @InjectMocks
     private CuentaController cuentaController;
 
-    // Helper para crear DTOs consistentes
     private CuentaDTO crearCuentaDTOEjemplo(Integer id, String tipo) {
         return CuentaDTO.builder()
                 .id(id)
@@ -41,15 +40,13 @@ class CuentaControllerTest {
 
     @Test
     void obtenerTodas_RetornaListaCuentas() {
-        // Arrange
+
         CuentaDTO cuenta1 = crearCuentaDTOEjemplo(1, "corriente");
         CuentaDTO cuenta2 = crearCuentaDTOEjemplo(2, "ahorro");
         when(cuentaService.obtenerTodas()).thenReturn(List.of(cuenta1, cuenta2));
 
-        // Act
         List<CuentaDTO> resultado = cuentaController.obtenerTodas();
 
-        // Assert
         assertAll("Verificación lista completa",
                 () -> assertEquals(2, resultado.size()),
                 () -> assertEquals("corriente", resultado.get(0).getTipo()),
@@ -59,14 +56,11 @@ class CuentaControllerTest {
 
     @Test
     void obtenerPorId_Existente_RetornaCuenta() {
-        // Arrange
         CuentaDTO cuentaMock = crearCuentaDTOEjemplo(1, "corriente");
         when(cuentaService.obtenerPorId(1)).thenReturn(cuentaMock);
 
-        // Act
         CuentaDTO resultado = cuentaController.obtenerPorId(1);
 
-        // Assert
         assertAll("Campos principales",
                 () -> assertEquals(1, resultado.getId()),
                 () -> assertEquals("ES1", resultado.getNumeroCuenta()),
@@ -76,15 +70,12 @@ class CuentaControllerTest {
 
     @Test
     void crearCuenta_Valida_RetornaCreada() {
-        // Arrange
         CuentaDTO nuevaCuenta = crearCuentaDTOEjemplo(null, "ahorro");
         CuentaDTO cuentaCreada = crearCuentaDTOEjemplo(3, "ahorro");
         when(cuentaService.crear(nuevaCuenta)).thenReturn(cuentaCreada);
 
-        // Act
         CuentaDTO resultado = cuentaController.crear(nuevaCuenta);
 
-        // Assert
         assertAll("Creación exitosa",
                 () -> assertEquals(3, resultado.getId()),
                 () -> assertEquals("ahorro", resultado.getTipo()),
