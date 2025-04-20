@@ -26,6 +26,15 @@ public class Usuario implements UserDetails {
 
     private String password;
 
+    private String telefono;
+
+    private String direccion;
+
+    @PrePersist
+    public void prePersist() {
+        this.fechaRegistro = LocalDateTime.now();
+    }
+
     @Column(name = "fecha_registro")
     private LocalDateTime fechaRegistro;
 

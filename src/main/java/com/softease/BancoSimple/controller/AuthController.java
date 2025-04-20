@@ -1,20 +1,25 @@
 package com.softease.BancoSimple.controller;
 
-import com.softease.BancoSimple.dto.auth.AuthRequest;
-import com.softease.BancoSimple.dto.auth.AuthResponse;
-import com.softease.BancoSimple.dto.auth.RegisterRequest;
-import com.softease.BancoSimple.dto.auth.UsuarioResponseDTO;
+import com.softease.BancoSimple.dto.auth.*;
 import com.softease.BancoSimple.model.Usuario;
 import com.softease.BancoSimple.security.JwtService;
 import com.softease.BancoSimple.service.UsuarioService;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -26,19 +31,45 @@ public class AuthController {
     private final JwtService jwtService;
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
-        Authentication auth = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
-        );
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+        try {
+            // 1) Autenticar credenciales
+            var auth = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
+            );
+            SecurityContextHolder.getContext().setAuthentication(auth);
 
-        Usuario nuevo = usuarioService.buscarUsuarioPorEmail(request.getEmail()).orElseThrow();
-        String jwt = jwtService.generarToken(nuevo);
+            // 2) Obtener Usuario desde Optional o lanzar excepción si no existe
+            Usuario usuario = usuarioService.buscarUsuarioPorEmail(request.getEmail())
+                    .orElseThrow(() -> new UsernameNotFoundException(
+                            "No se encontró un usuario con email: " + request.getEmail()
+                    ));
 
+            // 3) Crear los claims para el JWT
+            Map<String, Object> claims = Map.of(
+                    "nombre",         usuario.getNombre(),
+                    "email",          usuario.getEmail(),
+                    "telefono",       usuario.getTelefono(),
+                    "direccion",      usuario.getDireccion(),
+                    "fecha_registro", usuario.getFechaRegistro().toString()
+            );
 
-        AuthResponse response = new AuthResponse();
-        response.setToken(jwt);
-        return ResponseEntity.ok(response);
+            // 4) Generar token
+            UserDetails userDetails = usuarioService.loadUserByUsername(usuario.getEmail());
+            String token = jwtService.generarToken(claims, userDetails);
+
+            return ResponseEntity.ok(Map.of("token", token));
+        } catch (BadCredentialsException ex) {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body("Credenciales incorrectas");
+        } catch (UsernameNotFoundException ex) {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(ex.getMessage());
+        }
     }
+
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
@@ -48,14 +79,24 @@ public class AuthController {
                     .body("El correo ya está en uso.");
         }
 
+        // Crear y guardar usuario
+        UsuarioResponseDTO usuario = usuarioService.crear(request);
+
+
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("nombre", usuario.getNombre());
+        claims.put("email", usuario.getEmail());
+        claims.put("telefono", usuario.getTelefono());
+        claims.put("direccion", usuario.getDireccion());
+        claims.put("fecha_registro", usuario.getFechaRegistro().toString());
+
         // UsuarioResponseDTO nuevoUsuario = usuarioService.crear(request); // Si queremos mostrar los datos del usuario al crearse, tbn hay que modificar el authcontroller pa eso
 
-        UserDetails userDetails = usuarioService.loadUserByUsername(request.getEmail());
-        String jwt = jwtService.generarToken(userDetails);
+        // Generar token con claims
+        UserDetails userDetails = usuarioService.loadUserByUsername(usuario.getEmail());
+        String token = jwtService.generarToken(claims, userDetails);
 
-        AuthResponse response = new AuthResponse();
-        response.setToken(jwt);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(Map.of("token", token));
     }
 
 }
