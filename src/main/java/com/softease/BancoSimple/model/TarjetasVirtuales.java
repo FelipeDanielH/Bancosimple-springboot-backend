@@ -18,7 +18,7 @@ public class TarjetasVirtuales {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY) // <-- Lazy por defecto para rendimiento
+    @ManyToOne(fetch = FetchType.LAZY) // Lazy es para rendimiento (??
     @JoinColumn(name = "cuenta_id", nullable = false)
     private Cuenta cuentaId;
 

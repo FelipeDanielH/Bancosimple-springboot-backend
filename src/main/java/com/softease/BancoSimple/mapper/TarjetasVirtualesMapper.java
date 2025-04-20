@@ -21,7 +21,7 @@ public class TarjetasVirtualesMapper {
 
     public static TarjetasVirtuales toEntity(TarjetasVirtualesDTO dto) {
         Cuenta cuenta = new Cuenta();
-        cuenta.setId(dto.getCuentaId()); // Sólo seteamos el ID, pa' que JPA no se enoje
+        cuenta.setId(dto.getCuentaId());
 
         return TarjetasVirtuales.builder()
                 .id(dto.getId())
