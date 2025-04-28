@@ -12,7 +12,6 @@ public class CuentaMapper {
                 .numeroCuenta(cuenta.getNumeroCuenta())
                 .tipo(cuenta.getTipo().name())
                 .saldo(cuenta.getSaldo())
-                .fechaCreacion(cuenta.getFechaCreacion())
                 .build();
     }
 
@@ -23,7 +22,6 @@ public class CuentaMapper {
                 .numeroCuenta(dto.getNumeroCuenta())
                 .tipo(Cuenta.TipoCuenta.valueOf(dto.getTipo()))
                 .saldo(dto.getSaldo())
-                .fechaCreacion(dto.getFechaCreacion())
                 .build();
     }
 }

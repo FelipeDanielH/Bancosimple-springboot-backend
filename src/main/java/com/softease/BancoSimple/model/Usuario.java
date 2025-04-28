@@ -30,13 +30,13 @@ public class Usuario implements UserDetails {
 
     private String direccion;
 
-    @PrePersist
-    public void prePersist() {
-        this.fechaRegistro = LocalDateTime.now();
-    }
-
     @Column(name = "fecha_registro")
     private LocalDateTime fechaRegistro;
+
+    @PrePersist
+    public void onCreate() {
+        this.fechaRegistro = LocalDateTime.now();
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -67,4 +67,5 @@ public class Usuario implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 }

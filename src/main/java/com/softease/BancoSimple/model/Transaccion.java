@@ -28,19 +28,14 @@ public class Transaccion {
     @Column(nullable = false)
     private BigDecimal monto;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private TipoTransaccion tipo;
+    private String descripcion;
 
     @Enumerated(EnumType.STRING)
     private EstadoTransaccion estado = EstadoTransaccion.pendiente;
 
     @Column(name = "fecha_transaccion")
     private LocalDateTime fechaTransaccion;
-
-    public enum TipoTransaccion {
-        transferencia, recarga, pago
-    }
 
     public enum EstadoTransaccion {
         pendiente, completado, fallido

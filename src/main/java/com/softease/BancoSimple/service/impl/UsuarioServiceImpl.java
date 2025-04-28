@@ -2,24 +2,36 @@ package com.softease.BancoSimple.service.impl;
 
 import com.softease.BancoSimple.dto.auth.RegisterRequest;
 import com.softease.BancoSimple.dto.auth.UsuarioResponseDTO;
+import com.softease.BancoSimple.dto.transacciones.TransaccionDTO;
+import com.softease.BancoSimple.dto.transacciones.TransaccionFormDTO;
 import com.softease.BancoSimple.mapper.UsuarioMapper;
+import com.softease.BancoSimple.model.Cuenta;
+import com.softease.BancoSimple.model.Transaccion;
 import com.softease.BancoSimple.model.Usuario;
+import com.softease.BancoSimple.repository.CuentaRepository;
 import com.softease.BancoSimple.repository.UsuarioRepository;
 import com.softease.BancoSimple.service.UsuarioService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class UsuarioServiceImpl implements UsuarioService {
 
     private final UsuarioRepository repository;
     private final PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private CuentaRepository cuentaRepository;
 
     public UsuarioServiceImpl(UsuarioRepository repository, PasswordEncoder passwordEncoder) {
         this.repository = repository;
@@ -66,6 +78,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public void eliminar(Integer id) {
+        cuentaRepository.deleteByUsuarioId(id);
         repository.deleteById(id);
     }
 
@@ -84,4 +97,6 @@ public class UsuarioServiceImpl implements UsuarioService {
         return repository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado con email: " + email));
     }
+
+
 }

@@ -34,6 +34,11 @@ public class Cuenta {
     @Column(name = "fecha_creacion")
     private LocalDateTime fechaCreacion;
 
+    @PrePersist
+    protected void onCreate() {
+        fechaCreacion = LocalDateTime.now();
+    }
+
     public enum TipoCuenta {
         corriente, ahorro
     }

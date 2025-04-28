@@ -1,4 +1,4 @@
-package com.softease.BancoSimple.dto;
+package com.softease.BancoSimple.dto.transacciones;
 
 import lombok.*;
 import java.math.BigDecimal;
@@ -14,7 +14,7 @@ public class TransaccionDTO {
     private Integer cuentaOrigenId;
     private Integer cuentaDestinoId;
     private BigDecimal monto;
-    private String tipo;
+    private String descripcion;
     private String estado;
     private LocalDateTime fechaTransaccion;
 }

@@ -8,6 +8,7 @@ public class UsuarioMapper {
 
     public static UsuarioResponseDTO toDto(Usuario usuario) {
         UsuarioResponseDTO dto = new UsuarioResponseDTO();
+        dto.setId(usuario.getId());
         dto.setNombre(usuario.getNombre());
         dto.setEmail(usuario.getEmail());
         dto.setTelefono(usuario.getTelefono());

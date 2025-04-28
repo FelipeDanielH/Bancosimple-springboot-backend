@@ -1,6 +1,7 @@
 package com.softease.BancoSimple.controller;
 
 import com.softease.BancoSimple.dto.CuentaDTO;
+import com.softease.BancoSimple.dto.cuenta.CuentaResumenDTO;
 import com.softease.BancoSimple.service.CuentaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -48,5 +49,10 @@ public class CuentaController {
     @DeleteMapping("/{id}")
     public void eliminar(@PathVariable Integer id) {
         cuentaService.eliminar(id);
+    }
+
+    @GetMapping("/mia/{id}")
+    public CuentaResumenDTO obtenerResumenPorId(@PathVariable Integer id) {
+        return cuentaService.obtenerCuentaPorUsuario(id);
     }
 }

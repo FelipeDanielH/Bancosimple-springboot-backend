@@ -1,6 +1,8 @@
 package com.softease.BancoSimple.mapper;
 
-import com.softease.BancoSimple.dto.TransaccionDTO;
+import com.softease.BancoSimple.dto.transacciones.TransaccionDTO;
+import com.softease.BancoSimple.dto.transacciones.TransaccionFormDTO;
+import com.softease.BancoSimple.dto.transacciones.TransaccionSummaryDTO;
 import com.softease.BancoSimple.model.Cuenta;
 import com.softease.BancoSimple.model.Transaccion;
 
@@ -12,7 +14,7 @@ public class TransaccionMapper {
                 .cuentaOrigenId(t.getCuentaOrigen().getId())
                 .cuentaDestinoId(t.getCuentaDestino().getId())
                 .monto(t.getMonto())
-                .tipo(t.getTipo().name())
+                .descripcion(t.getDescripcion())
                 .estado(t.getEstado().name())
                 .fechaTransaccion(t.getFechaTransaccion())
                 .build();
@@ -24,10 +26,43 @@ public class TransaccionMapper {
                 .cuentaOrigen(Cuenta.builder().id(dto.getCuentaOrigenId()).build())
                 .cuentaDestino(Cuenta.builder().id(dto.getCuentaDestinoId()).build())
                 .monto(dto.getMonto())
-                .tipo(Transaccion.TipoTransaccion.valueOf(dto.getTipo()))
+                .descripcion(dto.getDescripcion())
                 .estado(Transaccion.EstadoTransaccion.valueOf(dto.getEstado()))
                 .fechaTransaccion(dto.getFechaTransaccion())
                 .build();
     }
+
+    public static TransaccionSummaryDTO toSummaryDto(Transaccion t, Integer userId) {
+        TransaccionSummaryDTO s = new TransaccionSummaryDTO();
+        s.setDescripcion(t.getDescripcion());
+        s.setFecha(t.getFechaTransaccion());
+        s.setMonto(t.getMonto());
+        s.setEstado(t.getEstado().name());
+        // comparar el userId con el id de origen
+        if (userId.equals(t.getCuentaOrigen().getId())) {
+            s.setTipo("out");
+        } else {
+            s.setTipo("in");
+        }
+        return s;
+    }
+
+    public TransaccionDTO fromRequest(TransaccionFormDTO req) {
+        TransaccionDTO dto = new TransaccionDTO();
+        // TODO: inyectar CuentaService y usarlo para convertir:
+        // Integer origenId   = cuentaService.buscarPorEmail(req.getIdUsuarioOrigen()).getId();
+        // Long destinoId  = cuentaService.buscarPorNumeroCuenta(req.getNumeroCuenta()).getId();
+        dto.setCuentaOrigenId(/*origenId*/ null);
+        dto.setCuentaDestinoId(/*destinoId*/ null);
+
+        dto.setMonto(req.getMonto());
+        dto.setDescripcion(req.getDescripcion());
+        // Al crear la transacción, el estado se establecerá en 'pendiente' y fecha ahora.
+        // dto.setEstado("pendiente");
+        // dto.setFechaTransaccion(LocalDateTime.now());
+
+        return dto;
+    }
+
 }
 

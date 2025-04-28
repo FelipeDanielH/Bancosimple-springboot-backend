@@ -3,7 +3,7 @@ package com.softease.BancoSimple.dto;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+
 
 @Data
 @NoArgsConstructor
@@ -15,5 +15,4 @@ public class CuentaDTO {
     private String numeroCuenta;
     private String tipo;
     private BigDecimal saldo;
-    private LocalDateTime fechaCreacion;
 }
