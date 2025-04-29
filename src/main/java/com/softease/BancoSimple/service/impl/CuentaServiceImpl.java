@@ -2,6 +2,7 @@ package com.softease.BancoSimple.service.impl;
 
 import com.softease.BancoSimple.dto.CuentaDTO;
 import com.softease.BancoSimple.dto.cuenta.CuentaResumenDTO;
+import com.softease.BancoSimple.exception.InsufficientFundsException;
 import com.softease.BancoSimple.mapper.CuentaMapper;
 import com.softease.BancoSimple.model.Cuenta;
 import com.softease.BancoSimple.model.Usuario;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -66,7 +68,7 @@ public class CuentaServiceImpl implements CuentaService {
     }
 
     @Override
-    public CuentaResumenDTO obtenerCuentaPorUsuario(Integer id){
+    public CuentaResumenDTO obtenerCuentaPorUsuario(Integer id) {
 
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
@@ -79,6 +81,25 @@ public class CuentaServiceImpl implements CuentaService {
                 .nombreTitular(usuario.getNombre())
                 .tipoCuenta(cuenta.getTipo().name())
                 .build();
+    }
 
+    @Override
+    public void debitar(Integer cuentaId, BigDecimal monto) {
+        Cuenta cuenta = cuentaRepository.findById(cuentaId)
+                .orElseThrow(() -> new RuntimeException("Cuenta no encontrada: " + cuentaId));
+        BigDecimal nuevoSaldo = cuenta.getSaldo().subtract(monto);
+        if (nuevoSaldo.compareTo(BigDecimal.ZERO) < 0) {
+            throw new InsufficientFundsException(cuentaId, "Saldo insuficiente para debitar " + monto);
+        }
+        cuenta.setSaldo(nuevoSaldo);
+        cuentaRepository.save(cuenta);
+    }
+
+    @Override
+    public void acreditar(Integer cuentaId, BigDecimal monto) {
+        Cuenta cuenta = cuentaRepository.findById(cuentaId)
+                .orElseThrow(() -> new RuntimeException("Cuenta no encontrada: " + cuentaId));
+        cuenta.setSaldo(cuenta.getSaldo().add(monto));
+        cuentaRepository.save(cuenta);
     }
 }

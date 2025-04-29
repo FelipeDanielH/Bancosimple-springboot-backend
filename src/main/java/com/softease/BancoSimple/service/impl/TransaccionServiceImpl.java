@@ -8,6 +8,7 @@ import com.softease.BancoSimple.model.Cuenta;
 import com.softease.BancoSimple.model.Transaccion;
 import com.softease.BancoSimple.repository.CuentaRepository;
 import com.softease.BancoSimple.repository.TransaccionRepository;
+import com.softease.BancoSimple.service.CuentaService;
 import com.softease.BancoSimple.service.TransaccionService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ public class TransaccionServiceImpl implements TransaccionService {
 
     private final TransaccionRepository transaccionRepository;
     private final CuentaRepository cuentaRepository;
+    private final CuentaService cuentaService;
 
     @Override
     public List<TransaccionDTO> obtenerTodas() {
@@ -82,8 +84,8 @@ public class TransaccionServiceImpl implements TransaccionService {
         Transaccion pendiente = transaccionRepository.save(entidad);
 
         // 3. Ajusto saldos: debito en origen y crédito en destino
-//        cuentaService.debitar(origenId, request.getMonto());
-//        cuentaService.acreditar(destinoId, request.getMonto());
+        cuentaService.debitar(origenId, request.getMonto());
+        cuentaService.acreditar(destinoId, request.getMonto());
 
         // 4. Marco la transacción como COMPLETADA y actualizo
         pendiente.setEstado(Transaccion.EstadoTransaccion.completado);
@@ -92,7 +94,5 @@ public class TransaccionServiceImpl implements TransaccionService {
         // 5. Retorno el DTO final
         return TransaccionMapper.toDTO(completada);
     }
-
-
 
 }
