@@ -1,10 +1,14 @@
 package com.softease.BancoSimple.controller;
 
 import com.softease.BancoSimple.dto.CuentaDTO;
+import com.softease.BancoSimple.dto.SaldoRequestDTO;
 import com.softease.BancoSimple.dto.cuenta.CuentaResumenDTO;
+import com.softease.BancoSimple.model.Cuenta;
 import com.softease.BancoSimple.service.CuentaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -54,5 +58,14 @@ public class CuentaController {
     @GetMapping("/mia/{id}")
     public CuentaResumenDTO obtenerResumenPorId(@PathVariable Integer id) {
         return cuentaService.obtenerCuentaPorUsuario(id);
+    }
+
+    @PostMapping("/{cuentaId}/saldo")
+    public ResponseEntity<Cuenta> agregarSaldo(
+            @PathVariable Integer cuentaId,
+            @RequestBody @Validated SaldoRequestDTO dto
+    ) {
+        Cuenta actualizada = cuentaService.agregarSaldo(cuentaId, dto);
+        return ResponseEntity.ok(actualizada);
     }
 }

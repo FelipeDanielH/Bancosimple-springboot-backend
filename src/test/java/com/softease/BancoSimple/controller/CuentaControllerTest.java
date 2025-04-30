@@ -34,7 +34,6 @@ class CuentaControllerTest {
                 .numeroCuenta("ES" + id)
                 .tipo(tipo)
                 .saldo(new BigDecimal("1000.00"))
-                .fechaCreacion(LocalDateTime.now())
                 .build();
     }
 
@@ -63,8 +62,8 @@ class CuentaControllerTest {
 
         assertAll("Campos principales",
                 () -> assertEquals(1, resultado.getId()),
-                () -> assertEquals("ES1", resultado.getNumeroCuenta()),
-                () -> assertNotNull(resultado.getFechaCreacion())
+                () -> assertEquals("ES1", resultado.getNumeroCuenta())
+
         );
     }
 

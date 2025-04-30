@@ -75,17 +75,13 @@ CREATE TABLE `recargas` (
 CREATE TABLE `tarjetas_virtuales` (
                                       `id` int NOT NULL AUTO_INCREMENT,
                                       `cuenta_id` int NOT NULL,
-                                      `numero_tarjeta` varchar(16) NOT NULL,
                                       `cvv` varchar(4) NOT NULL,
-                                      `saldo` decimal(15,2) NOT NULL,
                                       `estado` enum('activa','inactiva','bloqueada') DEFAULT 'activa',
                                       `fecha_creacion` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
                                       `fecha_expiracion` date NOT NULL,
                                       PRIMARY KEY (`id`),
-                                      UNIQUE KEY `numero_tarjeta` (`numero_tarjeta`),
                                       KEY `cuenta_id` (`cuenta_id`),
-                                      CONSTRAINT `tarjetas_virtuales_ibfk_1` FOREIGN KEY (`cuenta_id`) REFERENCES `cuentas` (`id`) ON DELETE CASCADE,
-                                      CONSTRAINT `tarjetas_virtuales_chk_1` CHECK ((`saldo` >= 0))
+                                      CONSTRAINT `tarjetas_virtuales_ibfk_1` FOREIGN KEY (`cuenta_id`) REFERENCES `cuentas` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 

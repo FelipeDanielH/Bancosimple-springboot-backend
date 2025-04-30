@@ -1,6 +1,7 @@
 package com.softease.BancoSimple.service.impl;
 
 import com.softease.BancoSimple.dto.CuentaDTO;
+import com.softease.BancoSimple.dto.SaldoRequestDTO;
 import com.softease.BancoSimple.dto.cuenta.CuentaResumenDTO;
 import com.softease.BancoSimple.exception.InsufficientFundsException;
 import com.softease.BancoSimple.mapper.CuentaMapper;
@@ -10,8 +11,10 @@ import com.softease.BancoSimple.repository.CuentaRepository;
 import com.softease.BancoSimple.repository.UsuarioRepository;
 import com.softease.BancoSimple.service.CuentaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -102,4 +105,21 @@ public class CuentaServiceImpl implements CuentaService {
         cuenta.setSaldo(cuenta.getSaldo().add(monto));
         cuentaRepository.save(cuenta);
     }
+
+    @Override
+    public Cuenta agregarSaldo(Integer cuentaId, SaldoRequestDTO dto) {
+        Cuenta cuenta = cuentaRepository.findById(cuentaId)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Cuenta no encontrada: " + cuentaId
+                ));
+
+        // Suma el monto al saldo actual
+        cuenta.setSaldo(cuenta.getSaldo().add(dto.getMonto()));
+
+        // Guarda y devuelve la entidad actualizada
+        return cuentaRepository.save(cuenta);
+    }
+
+
 }

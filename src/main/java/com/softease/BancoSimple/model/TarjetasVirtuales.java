@@ -22,14 +22,9 @@ public class TarjetasVirtuales {
     @JoinColumn(name = "cuenta_id", nullable = false)
     private Cuenta cuentaId;
 
-    @Column(name = "numero_tarjeta", nullable = false, unique = true)
-    private String numeroTarjeta;
 
     @Column(nullable = false)
     private String cvv;
-
-    @Column(nullable = false)
-    private BigDecimal saldo;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

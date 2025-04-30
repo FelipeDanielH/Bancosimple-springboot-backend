@@ -3,6 +3,7 @@ package com.softease.BancoSimple.mapper;
 import com.softease.BancoSimple.dto.BeneficioDTO;
 import com.softease.BancoSimple.model.Beneficio;
 
+
 public class BeneficioMapper {
 
     public static BeneficioDTO toDTO(Beneficio beneficio) {

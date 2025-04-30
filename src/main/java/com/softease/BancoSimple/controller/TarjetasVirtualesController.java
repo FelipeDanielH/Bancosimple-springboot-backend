@@ -1,6 +1,7 @@
 package com.softease.BancoSimple.controller;
 
 import com.softease.BancoSimple.dto.TarjetasVirtualesDTO;
+import com.softease.BancoSimple.dto.tarjetasVirtuales.TarjetaVirtualDetalladaDTO;
 import com.softease.BancoSimple.service.TarjetasVirtualesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,5 +28,11 @@ public class TarjetasVirtualesController {
         return ResponseEntity.status(HttpStatus.CREATED).body(nueva);
     }
 
+    @GetMapping("/cuenta/{cuentaId}")
+    public ResponseEntity<TarjetaVirtualDetalladaDTO> obtenerPorCuentaId(
+            @PathVariable Integer cuentaId) {
+        TarjetaVirtualDetalladaDTO dto = tarjetasVirtualesService.obtenerPorCuentaId(cuentaId);
+        return ResponseEntity.ok(dto);
+    }
 
 }

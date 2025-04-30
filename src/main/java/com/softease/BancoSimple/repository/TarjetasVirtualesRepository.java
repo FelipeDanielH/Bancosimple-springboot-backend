@@ -4,4 +4,5 @@ import com.softease.BancoSimple.model.TarjetasVirtuales;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TarjetasVirtualesRepository extends JpaRepository<TarjetasVirtuales, Integer> {
+    TarjetasVirtuales findFirstByCuentaId_Id(Integer cuentaId);
 }

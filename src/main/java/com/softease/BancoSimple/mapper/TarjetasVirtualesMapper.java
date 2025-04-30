@@ -1,6 +1,7 @@
 package com.softease.BancoSimple.mapper;
 
 import com.softease.BancoSimple.dto.TarjetasVirtualesDTO;
+import com.softease.BancoSimple.dto.tarjetasVirtuales.TarjetaVirtualDetalladaDTO;
 import com.softease.BancoSimple.model.Cuenta;
 import com.softease.BancoSimple.model.TarjetasVirtuales;
 
@@ -10,9 +11,7 @@ public class TarjetasVirtualesMapper {
         return TarjetasVirtualesDTO.builder()
                 .id(tarjeta.getId())
                 .cuentaId(tarjeta.getCuentaId() != null ? tarjeta.getCuentaId().getId() : null)
-                .numeroTarjeta(tarjeta.getNumeroTarjeta())
                 .cvv(tarjeta.getCvv())
-                .saldo(tarjeta.getSaldo())
                 .estado(tarjeta.getEstado().name())
                 .fechaCreacion(tarjeta.getFechaCreacion())
                 .fechaExpiracion(tarjeta.getFechaExpiracion())
@@ -26,12 +25,24 @@ public class TarjetasVirtualesMapper {
         return TarjetasVirtuales.builder()
                 .id(dto.getId())
                 .cuentaId(cuenta)
-                .numeroTarjeta(dto.getNumeroTarjeta())
                 .cvv(dto.getCvv())
-                .saldo(dto.getSaldo())
                 .estado(TarjetasVirtuales.EstadoTarjeta.valueOf(dto.getEstado()))
                 .fechaCreacion(dto.getFechaCreacion())
                 .fechaExpiracion(dto.getFechaExpiracion())
                 .build();
+    }
+
+    public static TarjetaVirtualDetalladaDTO toDetalladaDTO(TarjetasVirtuales entidad) {
+        TarjetaVirtualDetalladaDTO dto = new TarjetaVirtualDetalladaDTO();
+        dto.setId(entidad.getId());
+        dto.setCuentaId(entidad.getCuentaId().getId());
+        dto.setNumeroTarjeta(entidad.getCuentaId().getNumeroCuenta());  // nuevo
+        dto.setCvv(entidad.getCvv());
+        dto.setEstado(entidad.getEstado().name());
+        dto.setFechaCreacion(entidad.getFechaCreacion());
+        dto.setFechaExpiracion(entidad.getFechaExpiracion());
+        // extraemos saldo de Cuenta
+        dto.setSaldo(entidad.getCuentaId().getSaldo());
+        return dto;
     }
 }

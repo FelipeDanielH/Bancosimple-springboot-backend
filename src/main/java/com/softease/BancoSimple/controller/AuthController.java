@@ -118,7 +118,7 @@ public class AuthController {
         Random random = new Random();
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < 12; i++) {
-            sb.append(random.nextInt(10));
+            sb.append(random.nextInt(12));
         }
         return sb.toString();
     }
