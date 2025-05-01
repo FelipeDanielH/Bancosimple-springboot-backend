@@ -36,6 +36,7 @@ public class WebSecurityConfig {
                 // 3) Rutas públicas
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/register", "/auth/login").permitAll()
+                        .requestMatchers("/transacciones/comprar").permitAll()
                         .anyRequest().permitAll()
                 )
                 // 4) Stateless (sin sesión)

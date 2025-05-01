@@ -1,5 +1,6 @@
 package com.softease.BancoSimple.controller;
 
+import com.softease.BancoSimple.dto.transacciones.CompraRequestDTO;
 import com.softease.BancoSimple.dto.transacciones.TransaccionDTO;
 import com.softease.BancoSimple.dto.transacciones.TransaccionFormDTO;
 import com.softease.BancoSimple.dto.transacciones.TransaccionSummaryDTO;
@@ -52,6 +53,12 @@ public class TransaccionController {
     @PostMapping("/procesar")
     public ResponseEntity<TransaccionDTO> procesar(@RequestBody TransaccionFormDTO request) {
         TransaccionDTO resultado = transaccionService.procesarTransaccion(request);
+        return ResponseEntity.ok(resultado);
+    }
+
+    @PostMapping("/comprar")
+    public ResponseEntity<TransaccionDTO> comprar(@RequestBody CompraRequestDTO req) {
+        TransaccionDTO resultado = transaccionService.procesarCompra(req);
         return ResponseEntity.ok(resultado);
     }
 }

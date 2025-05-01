@@ -1,6 +1,7 @@
 package com.softease.BancoSimple.service;
 
 
+import com.softease.BancoSimple.dto.transacciones.CompraRequestDTO;
 import com.softease.BancoSimple.dto.transacciones.TransaccionDTO;
 import com.softease.BancoSimple.dto.transacciones.TransaccionFormDTO;
 import com.softease.BancoSimple.dto.transacciones.TransaccionSummaryDTO;
@@ -15,4 +16,7 @@ public interface TransaccionService {
     List<TransaccionSummaryDTO> obtenerUltimasTransacciones(Integer userId, int limite);
 
     TransaccionDTO procesarTransaccion(TransaccionFormDTO request);
+
+
+    TransaccionDTO procesarCompra(CompraRequestDTO req);
 }

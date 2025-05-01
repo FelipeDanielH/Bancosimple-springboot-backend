@@ -14,7 +14,7 @@ import java.util.Map;
 @Component
 public class JwtService {
 
-    private final String SECRET_KEY = "super-secreta-clave-de-32-caracteres-segura";
+    private final String SECRET_KEY = "hI8VssOSj+tn6XhTufSGV+5Sb6Pbnfm7SnN8MEYx2WiLSZRyfZrfJHEmMMUB+gxXDf7MG+uAlVpPX8KyIvRm8A==";
 
     public String generarToken(Map<String, Object> extraClaims, UserDetails userDetails) {
         return Jwts.builder()
@@ -22,7 +22,7 @@ public class JwtService {
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 86400000))
-                .signWith(getKey(), SignatureAlgorithm.HS256)
+                .signWith(getKey(), SignatureAlgorithm.HS512)
                 .compact();
     }
 
