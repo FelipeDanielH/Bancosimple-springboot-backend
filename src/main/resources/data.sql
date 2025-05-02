@@ -1,4 +1,4 @@
-USE `BancoSimple_Completo`;
+USE `bancosimple`;
 
 -- Insertar en beneficios
 INSERT INTO beneficios (descripcion, descuento, activo) VALUES

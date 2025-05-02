@@ -1,5 +1,5 @@
-CREATE DATABASE IF NOT EXISTS `BancoSimple_Completo` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
-USE `BancoSimple_Completo`;
+CREATE DATABASE IF NOT EXISTS `bancosimple` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+USE `bancosimple`;
 
 -- Eliminar todas las tablas en orden de dependencias
 DROP TABLE IF EXISTS `descuentos_aplicados`;
